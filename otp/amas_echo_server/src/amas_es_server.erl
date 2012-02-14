@@ -34,6 +34,7 @@
 %%---------------------------------------------------------------[ API.IMPL ]
 %% 启动服务
 start_link(LSock) -> 
+    io:format("gen_server[~p]: start link ...~n",[self()]),
     gen_server:start_link(?MODULE, [LSock], []).
 
 %get_count() ->
@@ -45,6 +46,7 @@ stop() ->
 %%---------------------------------------------------------------[ gen_server.callback ]
 %% 1. init/1
 init([LSock]) ->
+    io:format("gen_server[~p]: init/1 ...~n",[self()]),
     {ok, #state{lsock = LSock}, 0}.
 
 %% 2. handle_call/3
@@ -57,20 +59,20 @@ handle_cast(stop, State) ->
 
 %% 4. handle_info/2
 handle_info({tcp, Socket, RawData}, State) ->
-    io:format("handle_info : tcp",[]),
+    io:format("gen_server[~p]: handle_info : tcp ~n",[self()]),
     NewState = handle_data(Socket, RawData, State),
     {noreply, NewState};
 
 %% 5. handle_info
 handle_info(timeout, #state{lsock = LSock} = State) ->
-    io:format("handle_info : timeout.accept",[]),
+    io:format("gen_server[~p]: handle_info : timeout.accept ~n",[self()]),
     {ok, _Sock} = gen_tcp:accept(LSock),
-    io:format("handle_info : timeout.accpeded...",[]),
+    io:format("gen_server[~p]: handle_info : timeout.accpeded incoming connection...",[self()]),
     amas_es_sup:start_child(),
     {noreply, State};
 
 handle_info({tcp_closed, _Socket}, State) ->
-    io:format("handle_info : tcp_close",[]),
+    io:format("gen_server[~p]: handle_info : tcp closed ~n",[self()]),
     {stop, normal, State}.
 
 terminate(_Reason, _State) ->
@@ -83,7 +85,7 @@ code_change(_OldVsn, State, _Extra) ->
 %%---------------------------------------------------------------[ internal.functions ]
 handle_data(Socket,RawData,State) ->
     try
-        io:format("[RECV]:~p~n", [RawData]),
+        io:format("gen_server[~p]: handle_data : [~p] ~n",[self(), RawData]),
         gen_tcp:send(Socket, io_lib:fwrite("~p~n", [RawData]))
     catch
         _C:E ->
