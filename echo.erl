@@ -1,5 +1,4 @@
 -module(echo).
--author(‘Jesse E.I. Farmer <jesse@20bits.com>’).
 
 -export([listen/1]).
 
@@ -25,3 +24,6 @@ loop(Socket) ->
         {error, closed} ->
             ok
     end.
+
+add(M, N) ->
+    M+N.
