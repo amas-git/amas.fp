@@ -1,0 +1,11 @@
+.class
+.project
+bin/
+gen/
+proguard/
+*.DS_Store
+.settings/
+perform/
+*.hs
+*.hi
+*.o

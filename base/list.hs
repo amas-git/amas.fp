@@ -30,6 +30,11 @@ length' [] = 0
 length' (x:xs) = 1 + length' xs
 
 
+lengthAcc [] acc = acc
+lengthAcc (x:xs) acc = lengthAcc xs (acc+1)
+
+length'' xs = lengthAcc xs 0
+
 {-- LIST TRANSFORMATION --}
 map' :: (a -> b) -> [a] -> [b]
 map' f [] = []
