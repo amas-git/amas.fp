@@ -1,0 +1,10 @@
+{release,
+    {"amas_echo_server", "0.1.0"},
+    {erts, "5.8.1"},          
+    [
+    {kernel, "2.14.1"},
+    {stdlib, "1.17.1"},
+    {sasl, "2.1.9.2"},
+    {amas_echo_server, "0.1.0"}
+    ]
+}.
