@@ -338,3 +338,30 @@ caesaDecoding n = caesaEncoding (-n)
 
 freqs xs = map (\x -> fromIntegral x / (fromIntegral $ length xs)) [ (count x xs) | x<-['a'..'z']]
   where count t xs = length [ x | x<-xs, x == t]
+        
+--factors :: Int -> [Int]
+--factors 0 = []
+factors n = [ x | x <-  [1..n], n `mod` x == 0 ]
+-- factors n = [ x | x <- [1..(n/2)] , n `mod` x == 0 ]
+
+perfects :: Int -> [Int]
+perfects n = [ x | x <-[1..n], isPerfect x ]
+  where isPerfect n = (sum $ factors n) == n
+        
+scalarproduct xs [] = 0        
+scalarproduct [] xs = 0
+scalarproduct xs ys = sum [ x*y | (x,y) <- (zip xs ys) ]
+
+
+-- mutal recursion
+evens [] = []
+evens (x : xs) = x: odds xs
+
+odds [] = []
+odds (_: xs) = evens xs
+
+and' :: [Bool] -> Bool
+and' xs = foldl (\a b -> a && b) True xs
+
+concat'' :: [[a]] -> [a]
+concat'' xxs = foldl (\a b -> a ++ b) [] xxs
