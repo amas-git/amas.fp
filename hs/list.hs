@@ -232,11 +232,11 @@ instance Eq Book where
 
 
 -- combinations :: Integer -> [a] -> [[a]]
-combinations _ [] = [[]]
-combinations 0 _  = [[]]
+--combinations _ [] = [[]]
+--combinations 0 _  = [[]]
 
--- combinations n (x:xs) = (map (x:) (combinations (n-1) xs)) ++ (combinations n xs)
--- combinations n xs = [ y:ys | y:xs <- tail xs, ys <- combinations (n-1) xs]
+--combinations n (x:xs) = (map (x:) (combinations (n-1) xs)) ++ (combinations n xs)
+--combinations n xs = [ y:ys | y:xs <- tail xs, ys <- combinations (n-1) xs]
 
 
 -- permutations
@@ -365,3 +365,53 @@ and' xs = foldl (\a b -> a && b) True xs
 
 concat'' :: [[a]] -> [a]
 concat'' xxs = foldl (\a b -> a ++ b) [] xxs
+
+type Bit = Int
+
+bin2int bits = sum [ w*b | (w,b) <- zip weights bits]
+  where weights = iterate (*2) 1
+        
+type Function = Int -> Int
+
+double :: Function
+double n = 2 * n 
+
+-- Functional Parser
+-- What's Parser
+--   * type Parser -> String -> Tree
+-- 更常见的, parser不是总是消耗掉素有的输入String, 因此除了Parser生成的树, 余下的字符串也需要返回
+--   * type Parser -> String -> (Tree, String)
+-- 因为Parser并不一定返回Tree, 异常的情况下Parser可能不会产生任何结果, 为了方便我们可以将Parser改写成
+--   * type Parser -> String -> [(Tree, String)]  -- 返回[]即代表Parser出了差子
+-- 最后生成的这个树的类型可有变化
+--   * type Parser -> [(a,String)]
+
+-- 1. return
+--return v input = [(v,input)] 
+-- 但是我们更喜欢currying版本的return
+-- type Parser -> [(a,String)]
+type Parser a = String -> [(a,String)]
+
+ret v = \input -> [(v,input)]
+
+--failure input = []
+failure = \input -> []
+
+item = \input -> 
+  case input of
+    [] -> []
+    (x:xs) -> [(x,xs)]
+
+parse :: Parser a -> String -> [(a, String)]
+parse p input = p input
+
+(>>>=) :: Parser a -> (a -> Parser b) -> Parser b
+p >>>= f = \input -> 
+  case parse p input of
+    []        -> []
+    [(v,out)] -> parse f out
+            
+
+p = do 
+  x = item
+  return (x,y)
