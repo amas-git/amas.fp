@@ -48,3 +48,13 @@ doSomething''''' m = do
   s2 <- getS2 s1
   s3 <- getS3 s2
   return' s3
+
+
+fromJust' (Just x) = x
+
+data Term = Con Int | Add Term Term
+          deriving (Show)
+                   
+eval :: Term -> Int
+eval (Con x) = x
+eval (Add x y) = (eval x) + (eval y)
