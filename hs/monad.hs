@@ -48,3 +48,9 @@ doSomething''''' m = do
   s2 <- getS2 s1
   s3 <- getS3 s2
   return' s3
+
+--f = fromJust
+--getFromMaybe Nothing _ = 0
+--getFromMaybe Just x  = 1
+
+
