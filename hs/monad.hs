@@ -54,3 +54,12 @@ doSomething''''' m = do
 --getFromMaybe Just x  = 1
 
 
+
+fromJust' (Just x) = x
+
+data Term = Con Int | Add Term Term
+          deriving (Show)
+                   
+eval :: Term -> Int
+eval (Con x) = x
+eval (Add x y) = (eval x) + (eval y)
